@@ -11,6 +11,8 @@ import LoginPage from './Pages/LoginPage.jsx';
 import SinglePostPage from './Pages/SinglePostPage.jsx';
 import RegisterPage from './Pages/RegisterPage.jsx';
 import MainLayout from './LayOuts/MainLayout.jsx';
+import AboutPage from './Pages/AboutPage.jsx';
+import ContactPage from './Pages/ContactPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
       {
         path: '/write',
         element: <WritePage />,
+      },
+      {
+        path: '/about',
+        element: <AboutPage />,
+      },
+      {
+        path: '/contact',
+        element: <ContactPage />,
       },
       {
         path: '/login',

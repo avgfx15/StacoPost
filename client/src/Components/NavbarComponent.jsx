@@ -4,24 +4,33 @@ import React, { useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { GrClose } from 'react-icons/gr';
 import ImageComponent from './ImageComponent';
+import { NavLink } from 'react-router';
 
 // & Navbar Component
 const NavbarComponent = () => {
   // @ Open Mobile Menu Declare Variable With State
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
 
+  // $ Close Mobile Menu On Select Route
+  const closeMenu = () => {
+    setOpenMobileMenu(false);
+  };
+
   // ^ Render Navbar Component
   return (
     <div className='w-full h-16 md:h-20 flex items-center justify-between'>
       {/* LOGO */}
-      <div className='flex items-center gap-4 cursor-pointer text-2xl font-bold'>
+      <NavLink
+        to='/'
+        className='flex items-center gap-4 cursor-pointer text-2xl font-bold'
+      >
         <ImageComponent
           className='w-12 h-12 rounded-full'
           src='/Logo.png'
           alt='Logo'
         />
         <span>StacoPost</span>
-      </div>
+      </NavLink>
 
       {/* MOBILE MENU */}
       <div className='md:hidden'>
@@ -39,30 +48,42 @@ const NavbarComponent = () => {
             openMobileMenu ? '-right-0' : '-right-[100%]'
           }`}
         >
-          <a href='/'>Home</a>
-          <a href='/'>Trending</a>
-          <a href='/'>Most Popular</a>
-          <a href='/'>About</a>
-          <a href='/'>
+          <NavLink to='/' onClick={closeMenu}>
+            Home
+          </NavLink>
+          <NavLink to='/' onClick={closeMenu}>
+            Trending
+          </NavLink>
+          <NavLink to='/' onClick={closeMenu}>
+            Most Popular
+          </NavLink>
+          <NavLink to='/about' onClick={closeMenu}>
+            About
+          </NavLink>
+          <NavLink to='/contact' onClick={closeMenu}>
+            Contact Us
+          </NavLink>
+          <NavLink to='/login' onClick={closeMenu}>
             <button className='py-2 px-4 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-all duration-300 ease-in-out'>
               Login
             </button>
-          </a>
+          </NavLink>
         </div>
       </div>
 
       {/* DESKTOP MENU */}
 
       <div className='hidden md:flex items-center gap-8 xl:gap-12 text-base font-medium'>
-        <a href='/'>Home</a>
-        <a href='/'>Trending</a>
-        <a href='/'>Most Popular</a>
-        <a href='/'>About</a>
-        <a href='/'>
+        <NavLink to='/'>Home</NavLink>
+        <NavLink to='/'>Trending</NavLink>
+        <NavLink to='/'>Most Popular</NavLink>
+        <NavLink to='/about'>About</NavLink>
+        <NavLink to='/contact'>Contact Us</NavLink>
+        <NavLink to='/login'>
           <button className='py-2 px-4 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-all duration-300 ease-in-out'>
             Login
           </button>
-        </a>
+        </NavLink>
       </div>
     </div>
   );
