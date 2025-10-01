@@ -3,6 +3,24 @@
                 "terminal.background": "#1e1e2e",
                 "terminal.foreground": "#cdd6f4",
                 "terminalCursor.background": "#f8bd7f",
-                "terminalCursor.foreground": "#f8bd7f"
-        }
+                "terminalCursor.foreground": "#f8bd7f",
+                "activityBar.activeBackground": "#7c37c3",
+                "activityBar.background": "#7c37c3",
+                "activityBar.foreground": "#e7e7e7",
+                "activityBar.inactiveForeground": "#e7e7e799",
+                "activityBarBadge.background": "#c77e38",
+                "activityBarBadge.foreground": "#15202b",
+                "commandCenter.border": "#e7e7e799",
+                "sash.hoverBorder": "#7c37c3",
+                "statusBar.background": "#632c9b",
+                "statusBar.foreground": "#e7e7e7",
+                "statusBarItem.hoverBackground": "#7c37c3",
+                "statusBarItem.remoteBackground": "#632c9b",
+                "statusBarItem.remoteForeground": "#e7e7e7",
+                "titleBar.activeBackground": "#632c9b",
+                "titleBar.activeForeground": "#e7e7e7",
+                "titleBar.inactiveBackground": "#632c9b99",
+                "titleBar.inactiveForeground": "#e7e7e799"
+        },
+        "peacock.color": "#632c9b"
 }
