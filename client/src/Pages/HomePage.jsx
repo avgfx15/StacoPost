@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router';
 import MainCategoriesNav from '../Components/MainCategoriesNav';
+import FeaturedPost from '../Components/FeaturedPost';
 
 const HomePage = () => {
   return (
@@ -71,6 +72,8 @@ const HomePage = () => {
 
       <MainCategoriesNav />
       {/* <FeaturedPost /> */}
+
+      <FeaturedPost />
       {/* <Post List /> */}
       {/* <NavbarComponent /> */}
       {/* <NavbarComponent /> */}
