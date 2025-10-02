@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router';
+import MainCategoriesNav from '../Components/MainCategoriesNav';
 
 const HomePage = () => {
   return (
@@ -65,6 +66,10 @@ const HomePage = () => {
           </button>
         </NavLink>
       </div>
+
+      {/* <CATEGORIES NAVBAR /> */}
+
+      <MainCategoriesNav />
       {/* <FeaturedPost /> */}
       {/* <Post List /> */}
       {/* <NavbarComponent /> */}
