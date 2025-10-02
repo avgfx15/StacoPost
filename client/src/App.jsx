@@ -12,13 +12,6 @@ const App = () => {
       {/* NAVBAR COMPONENT*/}
       <NavbarComponent />
 
-      {/* <BreadCrumb /> */}
-      {/* <Introduction /> */}
-      {/* <FeaturedPost /> */}
-      {/* <Post List /> */}
-      {/* <NavbarComponent /> */}
-      {/* <NavbarComponent /> */}
-      {/* <NavbarComponent /> */}
     </div>
   );
 };
