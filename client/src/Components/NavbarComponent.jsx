@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
 
+// | Clerk
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from '@clerk/clerk-react';
+
 // | react-icons
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { GrClose } from 'react-icons/gr';
@@ -79,11 +87,16 @@ const NavbarComponent = () => {
         <NavLink to='/'>Most Popular</NavLink>
         <NavLink to='/about'>About</NavLink>
         <NavLink to='/contact'>Contact Us</NavLink>
-        <NavLink to='/login'>
-          <button className='py-2 px-4 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-all duration-300 ease-in-out'>
-            Login
-          </button>
-        </NavLink>
+        <SignedOut>
+          <NavLink to='/login'>
+            <button className='py-2 px-4 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-all duration-300 ease-in-out'>
+              Login
+            </button>
+          </NavLink>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </div>
     </div>
   );
