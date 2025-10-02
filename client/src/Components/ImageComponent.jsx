@@ -17,6 +17,12 @@ const ImageComponent = ({ src, alt, className, width, height }) => {
       height={height}
       loading='lazy'
       lqio={{ active: true, quality: 20 }}
+      transformation={[
+        {
+          width: width,
+          height: height,
+        },
+      ]}
     />
   );
 };

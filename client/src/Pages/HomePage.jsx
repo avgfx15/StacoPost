@@ -1,9 +1,16 @@
 import React from 'react';
+
+// | Import Dependency
 import { NavLink } from 'react-router';
+
+// | Import Components
 import MainCategoriesNav from '../Components/MainCategoriesNav';
 import FeaturedPost from '../Components/FeaturedPost';
+import RecentPostsComponent from '../Components/RecentPostsComponent';
 
+// & Home Page Component
 const HomePage = () => {
+  // ^ Render Home Page
   return (
     <div className='flex flex-col gap-4'>
       {/* <BreadCrumb /> */}
@@ -74,12 +81,16 @@ const HomePage = () => {
       {/* <FeaturedPost /> */}
 
       <FeaturedPost />
-      {/* <Post List /> */}
-      {/* <NavbarComponent /> */}
-      {/* <NavbarComponent /> */}
-      {/* <NavbarComponent /> */}
+
+      {/* <Recent Post List /> */}
+
+      <div className='flex flex-col gap-4'>
+        <h1 className='my-5 text-2xl text-gray-400'>Recent Posts</h1>
+        <RecentPostsComponent />
+      </div>
     </div>
   );
 };
 
+// ~ Home Page Export
 export default HomePage;

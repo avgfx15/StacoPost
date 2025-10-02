@@ -13,11 +13,14 @@ const FeaturedPost = () => {
       {/* MOST RECENT POST OR FIRST POST FROM FEATURED POST */}
       <div className='w-full lg:w-1/2 flex flex-col gap-4'>
         {/* IMAGE */}
+
         <ImageComponent
           src='/Logo.png'
-          alt='Post Image'
-          className='w-full rounded-3xl object-cover'
+          alt='Logo Img'
+          width='700'
+          className='rounded-3xl object-cover w-full h-full'
         />
+
         {/* DETAILS */}
         <div className='flex items-center gap-4'>
           <h1 className='text-lg font-semibold'>01.</h1>
@@ -38,11 +41,14 @@ const FeaturedPost = () => {
       <div className='w-full lg:w-1/2 flex flex-col gap-4'>
         {/* SECOND POST */}
         <div className='lg:h-1/3 flex justify-between gap-4'>
-          <ImageComponent
-            src='/Logo.png'
-            alt='Logo Img'
-            className='w-1/3 rounded-3xl object-cover aspect-video'
-          />
+          <div className='w-1/3 aspect-video'>
+            <ImageComponent
+              src='/Logo.png'
+              alt='Logo Img'
+              width='300'
+              className='rounded-3xl object-cover w-full h-full'
+            />
+          </div>
           <div className='w-2/3'>
             <div className='flex items-center gap-4 text-sm lg:text-base mb-3'>
               <h1 className='font-semibold'>02.</h1>
@@ -61,11 +67,14 @@ const FeaturedPost = () => {
         </div>
         {/* THIRD POST */}
         <div className='lg:h-1/3 flex justify-between gap-4'>
-          <ImageComponent
-            src='/Logo.png'
-            alt='Logo Img'
-            className='w-1/3 rounded-3xl object-cover aspect-video'
-          />
+          <div className='w-1/3 aspect-video'>
+            <ImageComponent
+              src='/Logo.png'
+              alt='Logo Img'
+              width='300'
+              className='rounded-3xl object-cover w-full h-full'
+            />
+          </div>
           <div className='w-2/3'>
             <div className='flex items-center gap-4 text-sm lg:text-base mb-3'>
               <h1 className='font-semibold'>03.</h1>
@@ -84,11 +93,14 @@ const FeaturedPost = () => {
         </div>
         {/* FORTH POST */}
         <div className='lg:h-1/3 flex justify-between gap-4'>
-          <ImageComponent
-            src='/Logo.png'
-            alt='Logo Img'
-            className='w-1/3 rounded-3xl object-cover aspect-video'
-          />
+          <div className='w-1/3 aspect-video'>
+            <ImageComponent
+              src='/Logo.png'
+              alt='Logo Img'
+              width='300'
+              className='rounded-3xl object-cover w-full h-full'
+            />
+          </div>
           <div className='w-2/3'>
             <div className='flex items-center gap-4 text-sm lg:text-base mb-3'>
               <h1 className='font-semibold'>04.</h1>
