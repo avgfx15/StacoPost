@@ -12,6 +12,8 @@ const RecentPostsComponent = () => {
       <RecentPostItem />
       <RecentPostItem />
       <RecentPostItem />
+      <RecentPostItem />
+      <RecentPostItem />
     </div>
   );
 };

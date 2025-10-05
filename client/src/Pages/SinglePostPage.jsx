@@ -6,6 +6,7 @@ import { FaFacebook, FaLinkedin, FaInstagram, Fa500Px } from 'react-icons/fa';
 import PostMenuActionsComponent from '../Components/PostMenuActionsComponent';
 import SearchComponent from '../Components/SearchComponent';
 import CommentsComponent from '../Components/CommentsComponent';
+import CategoriesComponent from '../Components/CategoriesComponent';
 
 const SinglePostPage = () => {
   return (
@@ -143,44 +144,7 @@ const SinglePostPage = () => {
             </div>
             <PostMenuActionsComponent />
             <h1 className='mb-3 font-bold'>Categories</h1>
-            <div className='flex flex-col gap-2 text-sm'>
-              <NavLink
-                to='/posts'
-                className='hover:bg-blue-50 px-4 py-2 rounded-full underline'
-              >
-                All Posts
-              </NavLink>
-              <NavLink
-                to='/posts?category=webdevelopment'
-                className='hover:bg-blue-50 px-4 py-2 rounded-full underline'
-              >
-                Web Development
-              </NavLink>
-              <NavLink
-                to='/posts?category=webdesign'
-                className='hover:bg-blue-50 px-4 py-2 rounded-full underline'
-              >
-                Web Design
-              </NavLink>
-              <NavLink
-                to='/posts?category=datascience'
-                className='hover:bg-blue-50 px-4 py-2 rounded-full underline'
-              >
-                Data Science
-              </NavLink>
-              <NavLink
-                to='/posts?category=database'
-                className='hover:bg-blue-50 px-4 py-2 rounded-full underline'
-              >
-                Database
-              </NavLink>
-              <NavLink
-                to='/posts?category=searchengine'
-                className='hover:bg-blue-50 px-4 py-2 rounded-full underline'
-              >
-                Search Engine
-              </NavLink>
-            </div>
+            <CategoriesComponent />
             <h1 className='mb-3 font-bold mt-5'>Search</h1>
             <SearchComponent />
           </div>
