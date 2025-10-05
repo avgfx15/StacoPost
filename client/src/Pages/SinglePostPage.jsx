@@ -2,7 +2,7 @@ import React from 'react';
 import ImageComponent from '../Components/ImageComponent';
 import { NavLink } from 'react-router';
 
-import { FaFacebook, FaLinkedin, FaInstagram, Fa500Px } from 'react-icons/fa';
+import { FaFacebook, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import PostMenuActionsComponent from '../Components/PostMenuActionsComponent';
 import SearchComponent from '../Components/SearchComponent';
 import CommentsComponent from '../Components/CommentsComponent';

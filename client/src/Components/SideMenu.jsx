@@ -1,6 +1,6 @@
 import React from 'react';
 import SearchComponent from './SearchComponent';
-import MainCategoriesNav from './MainCategoriesNav';
+
 import CategoriesComponent from './CategoriesComponent';
 
 const SideMenu = () => {
