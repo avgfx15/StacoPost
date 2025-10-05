@@ -3,6 +3,11 @@ import { createRoot } from 'react-dom/client';
 
 import App from './App.jsx';
 
+// In your main entry file or component file
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+import './reactQuill.scss'; // Import your custom font styles
+
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import HomePage from './Pages/HomePage.jsx';
 import AllPostsPage from './Pages/AllPostsPage.jsx';
