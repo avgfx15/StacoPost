@@ -6,12 +6,14 @@ const postSchema = new mongoose.Schema(
     author: {
       type: Schema.Types.ObjectId,
       ref: 'UserModel',
-      required: true,
+      required: false, // Temporarily make this optional for testing
     },
     category: {
-      type: Schema.Types.ObjectId,
-      ref: 'CategoryModel',
+      type: String,
       required: true,
+      // type: Schema.Types.ObjectId,
+      // ref: 'CategoryModel',
+      // required: true,
     },
     postImage: {
       type: String,
@@ -48,4 +50,6 @@ const postSchema = new mongoose.Schema(
 );
 
 //Export the model
-module.exports = mongoose.model('PostsModel', postSchema);
+const PostModel = mongoose.model('PostModels', postSchema);
+
+export default PostModel;
