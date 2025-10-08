@@ -1,6 +1,7 @@
+// | Import mongoose
 import mongoose, { Schema } from 'mongoose'; // Erase if already required
 
-// Declare the Schema of the Mongo model
+// ` Declare the Schema of the Mongo model
 const postSchema = new mongoose.Schema(
   {
     author: {
@@ -49,7 +50,7 @@ const postSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-//Export the model
+// ~ Export the model
 const PostModel = mongoose.model('PostModels', postSchema);
 
 export default PostModel;

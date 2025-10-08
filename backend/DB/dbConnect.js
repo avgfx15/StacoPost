@@ -1,8 +1,12 @@
+// | Import mongoose
 import mongoose from 'mongoose';
+
+// | Import dotenv Module
 import dotenv from 'dotenv';
+// ` Configure dotenv variable
 dotenv.config({ override: true });
 
-// Connect MongoDB at default port 27017.
+// ` Configure DB Connect With MongoDB
 const dbConnect = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
@@ -13,4 +17,5 @@ const dbConnect = async () => {
   }
 };
 
+// ~ Export DBConnect
 export default dbConnect;

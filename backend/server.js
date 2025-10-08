@@ -1,19 +1,33 @@
+// | import express
+
 import express from 'express';
+
+// | Import Router
 import userRouter from './routes/userRouter.js';
 import postRouter from './routes/postRouter.js';
 import commentRouter from './routes/commentRouter.js';
+
+// | Import DB Connect
 import dbConnect from './DB/dbConnect.js';
+
+// ` Configure App
 const app = express();
+// @ Port Declare
 const port = 3000;
 
+// ` Configure Middleware For JSON format
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// ` Configure middleware router
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
 
+// ` Configure base route
 app.get('/', (req, res) => res.status(200).send('Hello World!'));
+
+// ` Configure app lister with port and DB Configure with app start up
 app.listen(port, () => {
   try {
     console.log(`Blogpost app listening on port ${port}!`);
