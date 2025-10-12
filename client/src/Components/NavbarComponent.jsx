@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // | Clerk
 import {
   SignedIn,
   SignedOut,
   SignInButton,
+  useAuth,
   UserButton,
 } from '@clerk/clerk-react';
 
@@ -16,6 +17,16 @@ import { NavLink } from 'react-router';
 
 // & Navbar Component
 const NavbarComponent = () => {
+  // / Get Token From Clerk
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    (async () => {
+      const token = await getToken();
+      console.log(token);
+    })();
+  }, []);
+
   // @ Open Mobile Menu Declare Variable With State
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
 

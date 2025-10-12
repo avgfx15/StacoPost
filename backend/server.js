@@ -11,11 +11,16 @@ import commentRouter from './routes/commentRouter.js';
 import dbConnect from './DB/dbConnect.js';
 import webHookClerkRouter from './routes/webHookClerk.js';
 
+// | Import clerkMiddleware for authenticate user
+import { clerkMiddleware } from '@clerk/express';
+
 // ` Configure App
 const app = express();
 // @ Port Declare
 const port = 3000;
 
+// ` Apply `clerkMiddleware()` to all routes
+app.use(clerkMiddleware());
 // ` Configure webhooks before JSON parsing to get raw body
 app.use('/webhooks', webHookClerkRouter);
 
