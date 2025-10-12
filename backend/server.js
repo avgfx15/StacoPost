@@ -2,6 +2,9 @@
 
 import express from 'express';
 
+// | Import CORS
+import cors from 'cors';
+
 // | Import Router
 import userRouter from './routes/userRouter.js';
 import postRouter from './routes/postRouter.js';
@@ -16,6 +19,9 @@ import { clerkMiddleware } from '@clerk/express';
 
 // ` Configure App
 const app = express();
+
+// ` CORS Middleware
+app.use(cors(process.env.CLIENT_URL));
 // @ Port Declare
 const port = 3000;
 
