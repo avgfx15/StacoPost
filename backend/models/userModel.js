@@ -3,6 +3,11 @@ import mongoose from 'mongoose'; // Erase if already required
 // Declare the Schema of the Mongo model
 const userSchema = new mongoose.Schema(
   {
+    clerkId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     username: {
       type: String,
       required: true,
@@ -23,11 +28,13 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   { timestamps: true }
 );
 
 //Export the model
-module.exports = mongoose.model('UserModel', userSchema);
+const UserModel = mongoose.model('UserModels', userSchema);
+
+export default UserModel;

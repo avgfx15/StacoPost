@@ -9,20 +9,39 @@ import commentRouter from './routes/commentRouter.js';
 
 // | Import DB Connect
 import dbConnect from './DB/dbConnect.js';
+import webHookClerkRouter from './routes/webHookClerk.js';
 
 // ` Configure App
 const app = express();
 // @ Port Declare
 const port = 3000;
 
+// ` Configure webhooks before JSON parsing to get raw body
+app.use('/webhooks', webHookClerkRouter);
+
 // ` Configure Middleware For JSON format
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 // ` Configure middleware router
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
+
+app.use((error, req, res, next) => {
+  if (!res.headersSent) {
+    res.status(error.status || 500);
+
+    res.json({
+      message: error.message || 'Something went wrong!',
+      status: error.status || 500,
+      stack: error.stack,
+      error: error,
+      name: error.name,
+    });
+  }
+});
 
 // ` Configure base route
 app.get('/', (req, res) => res.status(200).send('Hello World!'));

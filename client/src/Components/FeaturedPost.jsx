@@ -25,7 +25,7 @@ const FeaturedPost = () => {
         <div className='flex items-center gap-4'>
           <h1 className='text-lg font-semibold'>01.</h1>
           <NavLink className='text-sky-600 lg:text-lg'>Web Design</NavLink>
-          <sapn className='text-gray-500'>2 days ago</sapn>
+          <span className='text-gray-500'>2 days ago</span>
         </div>
         {/* TITLE */}
         <NavLink
@@ -53,7 +53,7 @@ const FeaturedPost = () => {
             <div className='flex items-center gap-4 text-sm lg:text-base mb-3'>
               <h1 className='font-semibold'>02.</h1>
               <NavLink className='text-sky-600'>Web Design</NavLink>
-              <sapn className='text-gray-500'>2 days ago</sapn>
+              <span className='text-gray-500'>2 days ago</span>
             </div>
             {/* TITLE */}
             <NavLink
@@ -79,7 +79,7 @@ const FeaturedPost = () => {
             <div className='flex items-center gap-4 text-sm lg:text-base mb-3'>
               <h1 className='font-semibold'>03.</h1>
               <NavLink className='text-sky-600'>Web Development</NavLink>
-              <sapn className='text-gray-500'>5 days ago</sapn>
+              <span className='text-gray-500'>5 days ago</span>
             </div>
             {/* TITLE */}
             <NavLink
@@ -105,7 +105,7 @@ const FeaturedPost = () => {
             <div className='flex items-center gap-4 text-sm lg:text-base mb-3'>
               <h1 className='font-semibold'>04.</h1>
               <NavLink className='text-sky-600'>Data Science</NavLink>
-              <sapn className='text-gray-500'>1 week ago</sapn>
+              <span className='text-gray-500'>1 week ago</span>
             </div>
             {/* TITLE */}
             <NavLink

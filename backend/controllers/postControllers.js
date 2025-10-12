@@ -51,6 +51,6 @@ export const createPostController = async (req, res) => {
 
 export const deletePostController = async (req, res) => {
   const postId = req.params.postId;
-  const deletedPost = await PostModel.findByIdAndDelete(postId);
-  res.status(200).json('Post Deleted Successfully!' + deletedPost);
+  await PostModel.findByIdAndDelete(postId);
+  res.status(200).json('Post Deleted Successfully!');
 };
