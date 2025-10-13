@@ -8,6 +8,36 @@ import slugify from 'slugify';
 // | Import striptags
 import striptags from 'striptags';
 
+// | Import ImageKit
+import ImageKit from 'imagekit';
+
+// | Import dotenv Module
+import dotenv from 'dotenv';
+dotenv.config({ override: true });
+
+// / Upload Auth Using ImageKit
+
+const imageKit = new ImageKit({
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+  urlEndpoint: process.env.IMAGEKIT_END_POINT,
+});
+
+export const uploadAuthController = async (req, res) => {
+  try {
+    console.log(process.env.IMAGEKIT_PUBLIC_KEY);
+    console.log('Upload Function called');
+    const result = await imageKit.getAuthenticationParameters();
+    console.log(result);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error generating authentication parameters:', error);
+    res
+      .status(500)
+      .send({ error: 'Failed to generate authentication parameters' });
+  }
+};
+
 // / Get All Posts
 export const getAllPostController = async (req, res) => {
   const allPost = await PostModel.find();
@@ -46,12 +76,9 @@ export const createPostController = async (req, res) => {
 
   // ` Create SLUG
 
-  // ! To create unique slug uncomment the code below
-
-  // @ Check Slug exists
-  let slugTitle = striptags(postTitle);
-  console.log(slugTitle);
-  // % Create initial slug
+  let slugTitle = striptags(postTitle)
+    .replace(/\([^)]*\)/g, '')
+    .trim();
 
   let slug = slugify(slugTitle, {
     replacement: '_', // replace spaces with replacement character, defaults to `-`
@@ -62,16 +89,18 @@ export const createPostController = async (req, res) => {
     trim: true, // trim leading and trailing replacement chars, defaults to `true`
   });
 
-  console.log(slug);
-
-  // @ Check Slug exists
   let checkSlugExist = await PostModel.findOne({ slug });
 
-  // @ If exists add a counter to the slug
-  // % If not exists, proceed with the original slug
-  let counter = 1;
+  let counter = 2;
   while (checkSlugExist) {
-    slug = `${postTitle.toLowerCase().replace(/ /g, '_')}-${counter}`;
+    slug = `${slugify(slugTitle, {
+      replacement: '_',
+      remove: undefined,
+      lower: true,
+      strict: false,
+      locale: 'vi',
+      trim: true,
+    })}-${counter}`;
     checkSlugExist = await PostModel.findOne({ slug });
     counter++;
   }

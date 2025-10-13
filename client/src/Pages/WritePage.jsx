@@ -1,10 +1,11 @@
 import { useAuth, useUser } from '@clerk/clerk-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactQuillComponent from '../Components/ReactQuillComponent';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import UplaodFileComponent from '../Components/UploadFileComponent';
 
 const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
@@ -13,6 +14,10 @@ const baseUrl = import.meta.env.VITE_BASE_API_URL;
 const WritePage = () => {
   // / Get Token from Clerk useAuth function
   const { getToken } = useAuth();
+
+  // ^ State for Cover Image, Post Image, Video, Progress
+  const [cover, setCover] = useState('');
+  const [progress, setProgress] = useState(0);
 
   const navigate = useNavigate();
 
@@ -34,7 +39,9 @@ const WritePage = () => {
 
   // @ Declare values for ReactQuill components
   const [titleValue, setTitleValue] = useState('<h1><strong></strong></h1>');
-  const [descValue, setDescValue] = useState('');
+  const [subTitleValue, setSubTitleValue] = useState(
+    '<h2><strong></strong></h2>'
+  );
   const [contentValue, setContentValue] = useState('');
 
   // 1. Define the whitelist for Quill (must match the names used in SCSS)
@@ -55,7 +62,7 @@ const WritePage = () => {
   const titleModules = {
     toolbar: [[{ font: CUSTOM_FONT_NAMES }], [{ header: 1 }], ['bold']],
   };
-  const descModules = {
+  const subTitleModules = {
     toolbar: [
       [{ font: CUSTOM_FONT_NAMES }],
       [{ header: 2 }],
@@ -79,10 +86,10 @@ const WritePage = () => {
     const formData = new FormData(e.target);
 
     const newPostData = {
+      postImage: cover.filePath || '',
       category: formData.get('category'),
-      postImage: formData.get('postImage'),
       postTitle: titleValue,
-      subTitle: descValue,
+      subTitle: subTitleValue,
       content: contentValue,
     };
 
@@ -97,9 +104,18 @@ const WritePage = () => {
         className='flex flex-col gap-5 flex-1 mb-5'
         onSubmit={handleFormSubmit}
       >
-        <button className='w-max p-2 rounded-xl text-sm shadow-md text-gray-500 bg-white'>
-          Add A Cover Image
-        </button>
+        <UplaodFileComponent
+          type='image'
+          setProgress={setProgress}
+          setData={setCover}
+        >
+          <button className='w-max p-2 rounded-xl text-sm shadow-md text-gray-500 bg-white'>
+            Add A Cover Image
+          </button>
+        </UplaodFileComponent>
+
+        {'Progress:' + progress}
+
         <div className='flex flex-col justify-start mb-3'>
           <label htmlFor='title' className='text-xl mb-3'>
             Title
@@ -138,10 +154,10 @@ const WritePage = () => {
             Sub Title
           </label>
           <ReactQuillComponent
-            modules={descModules}
-            value={descValue}
+            modules={subTitleModules}
+            value={subTitleValue}
             onChange={(v) => {
-              setDescValue(v);
+              setSubTitleValue(v);
             }}
             className='subTitle-editor p-4 rounded-xl shadow-md bg-purple-100'
             placeholder='A Sub Title For Post...'
@@ -156,7 +172,7 @@ const WritePage = () => {
         />
         <button
           type='submit'
-          disabled={mutation.isPending}
+          disabled={mutation.isPending || (0 < progress && progress < 100)}
           className='py-2 px-3 w-28 bg-sky-800 text-white rounded-xl font-medium my-3 disabled:bg-sky-300 disabled:cursor-not-allowed disabled:text-gray-400 disabled:opacity-75'
         >
           {mutation.isPending ? 'Loading...' : 'Publish'}

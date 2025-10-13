@@ -17,6 +17,9 @@ import webHookClerkRouter from './routes/webHookClerk.js';
 // | Import clerkMiddleware for authenticate user
 import { clerkMiddleware } from '@clerk/express';
 
+// | Import uploadAuthController
+import { uploadAuthController } from './controllers/postControllers.js';
+
 // ` Configure App
 const app = express();
 
@@ -25,15 +28,31 @@ app.use(cors(process.env.CLIENT_URL));
 // @ Port Declare
 const port = 3000;
 
-// ` Apply `clerkMiddleware()` to all routes
-app.use(clerkMiddleware());
 // ` Configure webhooks before JSON parsing to get raw body
 app.use('/webhooks', webHookClerkRouter);
 
 // ` Configure Middleware For JSON format
 app.use(express.json({ limit: '10mb' }));
 
+// ` Configure Middleware For URL Encoded format
+
+// allow cross-origin requests
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
+
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// ` Upload Auth Route (before clerkMiddleware to allow unauthenticated access)
+app.get('/posts/upload-auth', uploadAuthController);
+
+// ` Apply `clerkMiddleware()` to all routes
+app.use(clerkMiddleware());
 
 // ` Configure middleware router
 app.use('/users', userRouter);
