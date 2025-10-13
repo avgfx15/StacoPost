@@ -38,8 +38,25 @@ export const uploadAuthController = async (req, res) => {
 
 // / Get All Posts
 export const getAllPostController = async (req, res) => {
-  const allPost = await PostModel.find();
-  res.status(200).json(allPost);
+  const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+  const limit = parseInt(req.query.limit) || 5;
+
+  const allPost = await PostModel.find()
+    .populate('author', 'username email')
+    .limit(limit)
+    .skip((page - 1) * 5)
+    .sort({ createdAt: -1 });
+
+  const totalPosts = await PostModel.countDocuments();
+  const hasMore = page * limit < totalPosts;
+  const totalPages = Math.ceil(totalPosts / limit);
+  res.status(200).json({
+    allPost,
+    nextCursor: hasMore ? page + 1 : null,
+    totalPages,
+    totalPosts,
+    hasMore,
+  });
 };
 
 // / Get Single Post By Slug

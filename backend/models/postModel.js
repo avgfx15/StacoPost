@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema(
   {
     author: {
       type: Schema.Types.ObjectId,
-      ref: 'UserModel',
+      ref: 'UserModels',
       required: false, // Temporarily make this optional for testing
     },
     category: {

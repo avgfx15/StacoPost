@@ -3,31 +3,66 @@ import React from 'react';
 // | Recent Post Item Component
 import RecentPostItem from './RecentPostItem';
 
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 // | Import TanStackQuery
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchAllPostsAction } from '../Actions/PostActions';
 
 // & Recent Posts Component
 const RecentPostsComponent = () => {
   // ` Configure TanStack Query For Data
-  const { isPending, error, data } = useQuery({
-    queryKey: ['repoData'],
-    queryFn: () => fetchAllPostsAction(),
+  // const { isPending, error, data } = useQuery({
+  //   queryKey: ['repoData'],
+  //   queryFn: () => fetchAllPostsAction(),
+  // });
+  // console.log(data);
+
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
+    queryKey: ['posts'],
+    queryFn: ({ pageParam = 1 }) => fetchAllPostsAction(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) =>
+      lastPage.hasMore ? pages.length + 1 : undefined,
   });
+
   console.log(data);
-  if (isPending) return 'Loading...';
+
+  const allPosts = data?.pages.flatMap((page) => page.allPost) || [];
+  console.log(allPosts);
+
+  if (status === 'loading') return 'Loading...';
+
+  if (status === 'error') return 'Something went wrong!';
 
   if (error) return 'An error has occurred: ' + error.message;
 
   // ^ Render Recent Posts Items
   return (
     <div className='flex flex-col gap-12 mb-5'>
-      <RecentPostItem />
-      <RecentPostItem />
-      <RecentPostItem />
-      <RecentPostItem />
-      <RecentPostItem />
-      <RecentPostItem />
+      <InfiniteScroll
+        dataLength={allPosts.length} //This is important field to render the next data
+        next={fetchNextPage}
+        hasMore={!!hasNextPage}
+        loader={<h4>Loading.More Posts...</h4>}
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            <b>All posts loaded!</b>
+          </p>
+        }
+      >
+        {allPosts.map((post) => (
+          <RecentPostItem key={post._id} post={post} />
+        ))}
+      </InfiniteScroll>
     </div>
   );
 };
