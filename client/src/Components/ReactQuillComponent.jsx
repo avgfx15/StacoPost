@@ -39,6 +39,7 @@ const ReactQuillComponent = ({
           [{ font: CUSTOM_FONT_NAMES }], // <--- Use the font names here
           [{ header: [1, 2, 3, 4, 5, 6, false] }],
           ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }], // dropdown with defaults from theme
           [
             { list: 'ordered' },
             { list: 'bullet' }, // This is correct for the toolbar
@@ -63,6 +64,9 @@ const ReactQuillComponent = ({
     'italic',
     'underline',
     'strike',
+    'color',
+    'background',
+    'direction',
     'list',
     'indent',
     'align',
