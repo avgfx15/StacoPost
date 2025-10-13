@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 
 // In your main entry file or component file
-import ReactQuill from 'react-quill-new';
+
 import 'react-quill-new/dist/quill.snow.css';
 import './reactQuill.scss'; // Import your custom font styles
 
@@ -18,6 +18,9 @@ import RegisterPage from './Pages/RegisterPage.jsx';
 import MainLayout from './LayOuts/MainLayout.jsx';
 import AboutPage from './Pages/AboutPage.jsx';
 import ContactPage from './Pages/ContactPage.jsx';
+
+// | Toastify For Message
+import { ToastContainer } from 'react-toastify';
 
 // | Import Clerk Providder
 import { ClerkProvider } from '@clerk/clerk-react';
@@ -80,6 +83,7 @@ createRoot(document.getElementById('root')).render(
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <ToastContainer position='bottom-right' />
       </QueryClientProvider>
     </ClerkProvider>
   </StrictMode>

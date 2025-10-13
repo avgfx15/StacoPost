@@ -31,9 +31,9 @@ app.use(clerkMiddleware());
 app.use('/webhooks', webHookClerkRouter);
 
 // ` Configure Middleware For JSON format
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ` Configure middleware router
 app.use('/users', userRouter);

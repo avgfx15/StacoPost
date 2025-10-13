@@ -1,3 +1,3 @@
-# TODO List for Updating Dotenv Configuration
-
-- [x] Update backend/DB/dbConnect.js to add { override: true } to dotenv.config()
+- [ ] Install 'slugify' and 'striptags' packages in backend
+- [ ] Update backend/controllers/postControllers.js to import libraries and sanitize slug generation
+- [ ] Test the changes by creating a post with HTML title and verifying clean slug in URL

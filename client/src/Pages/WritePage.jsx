@@ -1,21 +1,41 @@
-import { useUser } from '@clerk/clerk-react';
+import { useAuth, useUser } from '@clerk/clerk-react';
 import React, { useState } from 'react';
 import ReactQuillComponent from '../Components/ReactQuillComponent';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+
+const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
 // & Write Post Component
 
 const WritePage = () => {
+  // / Get Token from Clerk useAuth function
+  const { getToken } = useAuth();
+
+  const navigate = useNavigate();
+
+  // ` Use Mutation from TanStackQuery for New Post
+  const mutation = useMutation({
+    mutationFn: async (newPost) => {
+      const token = await getToken();
+      return axios.post(`${baseUrl}/posts`, newPost, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+    onSuccess: (res) => {
+      toast.success('Post Created Successfully');
+      navigate(`/${res.data.slug}`);
+    },
+  });
+
   // @ Declare values for ReactQuill components
   const [titleValue, setTitleValue] = useState('<h1><strong></strong></h1>');
   const [descValue, setDescValue] = useState('');
   const [contentValue, setContentValue] = useState('');
-
-  const [formData, setFormData] = useState({
-    title: '',
-    category: '',
-    subTitle: '',
-    content: '',
-  });
 
   // 1. Define the whitelist for Quill (must match the names used in SCSS)
   const CUSTOM_FONT_NAMES = [
@@ -56,7 +76,17 @@ const WritePage = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    const formData = new FormData(e.target);
+
+    const newPostData = {
+      category: formData.get('category'),
+      postImage: formData.get('postImage'),
+      postTitle: titleValue,
+      subTitle: descValue,
+      content: contentValue,
+    };
+
+    mutation.mutate(newPostData);
   };
 
   // ^ Render Write New Post Component
@@ -79,7 +109,6 @@ const WritePage = () => {
             value={titleValue}
             onChange={(v) => {
               setTitleValue(v);
-              setFormData({ ...formData, title: v });
             }}
             className='title-editor text-4xl outline-none font-semibold bg-sky-100 rounded-xl p-3'
             placeholder='My Awesome Story Title...'
@@ -93,10 +122,6 @@ const WritePage = () => {
             <select
               name='category'
               id='category'
-              value={formData.category}
-              onChange={(e) =>
-                setFormData({ ...formData, category: e.target.value })
-              }
               className='p-2 rounded-xl shadow-md bg-white'
             >
               <option value='general'>General</option>
@@ -117,7 +142,6 @@ const WritePage = () => {
             value={descValue}
             onChange={(v) => {
               setDescValue(v);
-              setFormData({ ...formData, subTitle: v });
             }}
             className='subTitle-editor p-4 rounded-xl shadow-md bg-purple-100'
             placeholder='A Sub Title For Post...'
@@ -127,16 +151,20 @@ const WritePage = () => {
           value={contentValue}
           onChange={(v) => {
             setContentValue(v);
-            setFormData({ ...formData, content: v });
           }}
           className='flex-1 rounded-xl shadow-md bg-white p-3'
         />
         <button
           type='submit'
-          className='py-2 px-3 w-28 bg-sky-800 text-white rounded-xl font-medium my-3'
+          disabled={mutation.isPending}
+          className='py-2 px-3 w-28 bg-sky-800 text-white rounded-xl font-medium my-3 disabled:bg-sky-300 disabled:cursor-not-allowed disabled:text-gray-400 disabled:opacity-75'
         >
-          Send
+          {mutation.isPending ? 'Loading...' : 'Publish'}
         </button>
+
+        {mutation.isError && (
+          <div>An error occurred: {mutation.error.message}</div>
+        )}
       </form>
     </div>
   );

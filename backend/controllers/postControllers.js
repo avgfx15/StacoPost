@@ -2,6 +2,12 @@
 import PostModel from '../models/postModel.js';
 import UserModel from '../models/userModel.js';
 
+// | Import Slugify
+import slugify from 'slugify';
+
+// | Import striptags
+import striptags from 'striptags';
+
 // / Get All Posts
 export const getAllPostController = async (req, res) => {
   const allPost = await PostModel.find();
@@ -35,15 +41,52 @@ export const createPostController = async (req, res) => {
   }
 
   // $ De-structure input from client
-  const {
-    category,
-    postImage,
-    postTitle,
-    slug,
-    subTitle,
-    content,
-    isFeatured,
-  } = req.body;
+  const { category, postImage, postTitle, subTitle, content, isFeatured } =
+    req.body;
+
+  // ` Create SLUG
+
+  // ! To create unique slug uncomment the code below
+
+  // @ Check Slug exists
+  let slugTitle = striptags(postTitle);
+  console.log(slugTitle);
+  // % Create initial slug
+
+  let slug = slugify(slugTitle, {
+    replacement: '_', // replace spaces with replacement character, defaults to `-`
+    remove: undefined, // remove characters that match regex, defaults to `undefined`
+    lower: true, // convert to lower case, defaults to `false`
+    strict: false, // strip special characters except replacement, defaults to `false`
+    locale: 'vi', // language code of the locale to use
+    trim: true, // trim leading and trailing replacement chars, defaults to `true`
+  });
+
+  console.log(slug);
+
+  // @ Check Slug exists
+  let checkSlugExist = await PostModel.findOne({ slug });
+
+  // @ If exists add a counter to the slug
+  // % If not exists, proceed with the original slug
+  let counter = 1;
+  while (checkSlugExist) {
+    slug = `${postTitle.toLowerCase().replace(/ /g, '_')}-${counter}`;
+    checkSlugExist = await PostModel.findOne({ slug });
+    counter++;
+  }
+  // ! End of unique slug code
+
+  // % Check if all fields are provided
+  if (!category || !postTitle || !subTitle || !content) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+  // % Check if postTitle is less than 50 characters
+  // if (postTitle.length > 50) {
+  //   return res
+  //     .status(400)
+  //     .json({ message: 'Post Title should be less than 50 characters' });
+  // }
 
   // @ Declare new Post Data
   const newPost = new PostModel({
