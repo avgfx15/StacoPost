@@ -1,5 +1,5 @@
 import { useAuth, useUser } from '@clerk/clerk-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ReactQuillComponent from '../Components/ReactQuillComponent';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';

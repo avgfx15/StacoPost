@@ -25,10 +25,8 @@ const imageKit = new ImageKit({
 
 export const uploadAuthController = async (req, res) => {
   try {
-    console.log(process.env.IMAGEKIT_PUBLIC_KEY);
-    console.log('Upload Function called');
-    const result = await imageKit.getAuthenticationParameters();
-    console.log(result);
+    const result = imageKit.getAuthenticationParameters();
+
     res.status(200).json(result);
   } catch (error) {
     console.error('Error generating authentication parameters:', error);
