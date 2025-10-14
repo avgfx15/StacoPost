@@ -9,6 +9,7 @@ import cors from 'cors';
 import userRouter from './routes/userRouter.js';
 import postRouter from './routes/postRouter.js';
 import commentRouter from './routes/commentRouter.js';
+import categoryRouter from './routes/categoryRouter.js';
 
 // | Import DB Connect
 import dbConnect from './DB/dbConnect.js';
@@ -58,6 +59,7 @@ app.use(clerkMiddleware());
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
+app.use('/categories', categoryRouter);
 
 app.use((error, req, res, next) => {
   if (!res.headersSent) {

@@ -8,3 +8,30 @@ export const fetchAllPostsAction = async (pageParams) => {
   });
   return response.data;
 };
+
+export const fetchAllCategoriesAction = async () => {
+  const response = await axios.get(`${baseUrl}/categories`);
+  return response.data;
+};
+
+export const createCategoryAction = async (categoryName, token) => {
+  const response = await axios.post(
+    `${baseUrl}/categories`,
+    { name: categoryName },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const deleteCategoryAction = async (categoryId, token) => {
+  const response = await axios.delete(`${baseUrl}/categories/${categoryId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

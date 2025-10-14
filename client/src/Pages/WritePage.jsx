@@ -1,11 +1,15 @@
 import { useAuth, useUser } from '@clerk/clerk-react';
 import React, { useState } from 'react';
 import ReactQuillComponent from '../Components/ReactQuillComponent';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import UplaodFileComponent from '../Components/UploadFileComponent';
+import {
+  fetchAllCategoriesAction,
+  createCategoryAction,
+} from '../Actions/PostActions';
 
 const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
@@ -18,8 +22,35 @@ const WritePage = () => {
   // ^ State for Cover Image, Post Image, Video, Progress
   const [cover, setCover] = useState('');
   const [progress, setProgress] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [newCategory, setNewCategory] = useState('');
+  const [showAddCategory, setShowAddCategory] = useState(false);
 
   const navigate = useNavigate();
+
+  // Fetch categories
+  const { data: categories, refetch: refetchCategories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchAllCategoriesAction,
+  });
+
+  // Create category mutation
+  const createCategoryMutation = useMutation({
+    mutationFn: async (categoryName) => {
+      const token = await getToken();
+      return createCategoryAction(categoryName, token);
+    },
+    onSuccess: (newCategory) => {
+      toast.success('Category created successfully');
+      setNewCategory('');
+      setShowAddCategory(false);
+      refetchCategories();
+      setSelectedCategory(newCategory.name);
+    },
+    onError: (error) => {
+      toast.error('Failed to create category: ' + error.message);
+    },
+  });
 
   // ` Use Mutation from TanStackQuery for New Post
   const mutation = useMutation({
@@ -134,21 +165,49 @@ const WritePage = () => {
           <label htmlFor='category' className='text-sm'>
             Choose a category :{' '}
           </label>
-          <div className='relative'>
+          <div className='relative flex items-center gap-2'>
             <select
               name='category'
               id='category'
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
               className='p-2 rounded-xl shadow-md bg-white'
             >
-              <option value='general'>General</option>
-              <option value='webdesign'>Web Design</option>
-              <option value='webdevelopment'>Web Development</option>
-              <option value='datascience'>Data Science</option>
-              <option value='database'>Database</option>
-              <option value='searchengine'>Searchengine</option>
+              <option value=''>Select a category</option>
+              {categories?.map((category) => (
+                <option key={category._id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
             </select>
+            <button
+              type='button'
+              onClick={() => setShowAddCategory(!showAddCategory)}
+              className='px-3 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600'
+            >
+              {showAddCategory ? 'Cancel' : 'Add New'}
+            </button>
           </div>
         </div>
+        {showAddCategory && (
+          <div className='flex items-center gap-3'>
+            <input
+              type='text'
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              placeholder='Enter new category name'
+              className='p-2 rounded-xl shadow-md bg-white flex-1'
+            />
+            <button
+              type='button'
+              onClick={() => createCategoryMutation.mutate(newCategory)}
+              disabled={!newCategory.trim() || createCategoryMutation.isPending}
+              className='px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 disabled:bg-gray-400'
+            >
+              {createCategoryMutation.isPending ? 'Creating...' : 'Create'}
+            </button>
+          </div>
+        )}
         <div className='flex flex-col mb-3'>
           <label htmlFor='title' className='text-xl mb-3'>
             Sub Title

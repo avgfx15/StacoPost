@@ -41,7 +41,7 @@ const RecentPostItem = ({ post }) => {
           </NavLink>
           <span>on</span>
           <NavLink className='text-sky-600 capitalize'>
-            {post?.category || 'General'}
+            {post?.category?.name || 'General'}
           </NavLink>
           <span>{format(post?.createdAt)}</span>
         </div>

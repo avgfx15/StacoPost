@@ -10,11 +10,9 @@ const postSchema = new mongoose.Schema(
       required: false, // Temporarily make this optional for testing
     },
     category: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'CategoryModels',
       required: true,
-      // type: Schema.Types.ObjectId,
-      // ref: 'CategoryModel',
-      // required: true,
     },
     postImage: {
       type: String,

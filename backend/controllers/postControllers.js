@@ -1,6 +1,7 @@
 // | Import POST MODEL
 import PostModel from '../models/postModel.js';
 import UserModel from '../models/userModel.js';
+import CategoryModel from '../models/categoryModel.js';
 
 // | Import Slugify
 import slugify from 'slugify';
@@ -43,6 +44,7 @@ export const getAllPostController = async (req, res) => {
 
   const allPost = await PostModel.find()
     .populate('author', 'username email')
+    .populate('category', 'name slug')
     .limit(limit)
     .skip((page - 1) * 5)
     .sort({ createdAt: -1 });
@@ -125,6 +127,36 @@ export const createPostController = async (req, res) => {
   if (!category || !postTitle || !subTitle || !content) {
     return res.status(400).json({ message: 'All fields are required' });
   }
+
+  // % Handle category: check if exists, create if not
+  let categoryDoc;
+  const existingCategory = await CategoryModel.findOne({
+    $or: [
+      { name: category.toLowerCase() },
+      { slug: slugify(category, { lower: true, strict: false }) },
+    ],
+  });
+
+  if (existingCategory) {
+    categoryDoc = existingCategory;
+  } else {
+    // Create new category
+    const categorySlug = slugify(category, {
+      replacement: '_',
+      remove: undefined,
+      lower: true,
+      strict: false,
+      locale: 'vi',
+      trim: true,
+    });
+
+    categoryDoc = new CategoryModel({
+      name: category.trim(),
+      slug: categorySlug,
+    });
+
+    await categoryDoc.save();
+  }
   // % Check if postTitle is less than 50 characters
   // if (postTitle.length > 50) {
   //   return res
@@ -135,7 +167,7 @@ export const createPostController = async (req, res) => {
   // @ Declare new Post Data
   const newPost = new PostModel({
     author: userExist._id,
-    category,
+    category: categoryDoc._id,
     postImage,
     postTitle,
     slug,

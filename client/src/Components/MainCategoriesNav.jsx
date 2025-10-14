@@ -1,8 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAllCategoriesAction } from '../Actions/PostActions';
 
 // & Main Categories Navbar Component
 const MainCategoriesNav = () => {
+  const { data: categories, isLoading } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchAllCategoriesAction,
+  });
+
   // ^ Render Main Categories Component
   return (
     <div className='hidden md:flex items-center justify-center rounded-2xl md:rounded-full bg-white p-4 shadow-lg gap-8'>
@@ -14,36 +21,16 @@ const MainCategoriesNav = () => {
         >
           All Posts
         </NavLink>
-        <NavLink
-          to='/posts?category=webdevelopment'
-          className='hover:bg-blue-50 px-4 py-2 rounded-full'
-        >
-          Web Development
-        </NavLink>
-        <NavLink
-          to='/posts?category=webdesign'
-          className='hover:bg-blue-50 px-4 py-2 rounded-full'
-        >
-          Web Design
-        </NavLink>
-        <NavLink
-          to='/posts?category=datascience'
-          className='hover:bg-blue-50 px-4 py-2 rounded-full'
-        >
-          Data Science
-        </NavLink>
-        <NavLink
-          to='/posts?category=database'
-          className='hover:bg-blue-50 px-4 py-2 rounded-full'
-        >
-          Database
-        </NavLink>
-        <NavLink
-          to='/posts?category=searchengine'
-          className='hover:bg-blue-50 px-4 py-2 rounded-full'
-        >
-          Search Engine
-        </NavLink>
+        {!isLoading &&
+          categories?.slice(0, 5).map((category) => (
+            <NavLink
+              key={category._id}
+              to={`/posts?category=${category.slug}`}
+              className='hover:bg-blue-50 px-4 py-2 rounded-full'
+            >
+              {category.name}
+            </NavLink>
+          ))}
       </div>
       {/* DIVIDER LINE */}
       <span className='text-xl font-medium'>|</span>
