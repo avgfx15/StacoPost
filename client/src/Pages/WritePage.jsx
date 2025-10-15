@@ -2,16 +2,14 @@ import { useAuth, useUser } from '@clerk/clerk-react';
 import React, { useState } from 'react';
 import ReactQuillComponent from '../Components/ReactQuillComponent';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import UplaodFileComponent from '../Components/UploadFileComponent';
 import {
   fetchAllCategoriesAction,
   createCategoryAction,
+  createNewPostAction,
 } from '../Actions/PostActions';
-
-const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
 // & Write Post Component
 
@@ -34,10 +32,11 @@ const WritePage = () => {
     queryFn: fetchAllCategoriesAction,
   });
 
-  // Create category mutation
+  // + Create category mutation
   const createCategoryMutation = useMutation({
     mutationFn: async (categoryName) => {
       const token = await getToken();
+
       return createCategoryAction(categoryName, token);
     },
     onSuccess: (newCategory) => {
@@ -56,15 +55,15 @@ const WritePage = () => {
   const mutation = useMutation({
     mutationFn: async (newPost) => {
       const token = await getToken();
-      return axios.post(`${baseUrl}/posts`, newPost, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      console.log(token);
+      return createNewPostAction(newPost, token);
+    },
+    onError: (error) => {
+      toast.error('Error creating post: ' + error.message);
     },
     onSuccess: (res) => {
       toast.success('Post Created Successfully');
-      navigate(`/${res.data.slug}`);
+      navigate(`/${res.slug}`);
     },
   });
 

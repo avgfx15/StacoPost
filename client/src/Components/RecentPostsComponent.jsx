@@ -23,8 +23,8 @@ const RecentPostsComponent = () => {
     error,
     fetchNextPage,
     hasNextPage,
-    isFetching,
-    isFetchingNextPage,
+    // isFetching,
+    // isFetchingNextPage,
     status,
   } = useInfiniteQuery({
     queryKey: ['posts'],
@@ -34,10 +34,7 @@ const RecentPostsComponent = () => {
       lastPage.hasMore ? pages.length + 1 : undefined,
   });
 
-  console.log(data);
-
   const allPosts = data?.pages.flatMap((page) => page.allPost) || [];
-  console.log(allPosts);
 
   if (status === 'loading') return 'Loading...';
 

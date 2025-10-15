@@ -2,7 +2,13 @@ import React from 'react';
 import ImageComponent from './ImageComponent';
 import { NavLink } from 'react-router';
 
-const SingleCommentComponent = () => {
+const SingleCommentComponent = ({ comment }) => {
+  console.log(comment.length);
+
+  if (comment.length === 0) {
+    return <div>No comment data available</div>;
+  }
+
   return (
     <div className='p-4 bg-sky-100 rounded-xl mb-5'>
       <div className='flex items-center gap-3'>

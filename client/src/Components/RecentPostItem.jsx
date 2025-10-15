@@ -18,7 +18,7 @@ const RecentPostItem = ({ post }) => {
           src={
             post?.postImage
               ? post?.postImage
-              : 'https://via.placeholder.com/700x400'
+              : 'https://ik.imagekit.io/avgfx15/Logo.png?updatedAt=1759289205304'
           } // Placeholder image if no URL provided
           alt='Logo Img'
           width='700'

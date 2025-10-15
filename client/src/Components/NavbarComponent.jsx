@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import {
   SignedIn,
   SignedOut,
-  SignInButton,
+  // SignInButton,
   useAuth,
   UserButton,
 } from '@clerk/clerk-react';
@@ -23,7 +23,6 @@ const NavbarComponent = () => {
   useEffect(() => {
     (async () => {
       const token = await getToken();
-      console.log(token);
     })();
   }, []);
 

@@ -43,7 +43,7 @@ export const getAllPostController = async (req, res) => {
   const limit = parseInt(req.query.limit) || 5;
 
   const allPost = await PostModel.find()
-    .populate('author', 'username email')
+    .populate('author', 'username email profileImage')
     .populate('category', 'name slug')
     .limit(limit)
     .skip((page - 1) * 5)
@@ -65,7 +65,9 @@ export const getAllPostController = async (req, res) => {
 export const getSinglePostBySlugController = async (req, res) => {
   const slug = req.params.slug;
 
-  const getPostBySlug = await PostModel.findOne({ slug });
+  const getPostBySlug = await PostModel.findOne({ slug })
+    .populate('author', 'username email')
+    .populate('category', 'name slug');
   res.status(200).json(getPostBySlug);
 };
 
@@ -88,8 +90,7 @@ export const createPostController = async (req, res) => {
   }
 
   // $ De-structure input from client
-  const { category, postImage, postTitle, subTitle, content, isFeatured } =
-    req.body;
+  const { category, postImage, postTitle, subTitle, content } = req.body;
 
   // ` Create SLUG
 
@@ -133,7 +134,16 @@ export const createPostController = async (req, res) => {
   const existingCategory = await CategoryModel.findOne({
     $or: [
       { name: category.toLowerCase() },
-      { slug: slugify(category, { lower: true, strict: false }) },
+      {
+        slug: slugify(category, {
+          replacement: '_',
+          remove: undefined,
+          lower: true,
+          strict: false,
+          locale: 'vi',
+          trim: true,
+        }),
+      },
     ],
   });
 
@@ -157,6 +167,7 @@ export const createPostController = async (req, res) => {
 
     await categoryDoc.save();
   }
+
   // % Check if postTitle is less than 50 characters
   // if (postTitle.length > 50) {
   //   return res
@@ -173,7 +184,6 @@ export const createPostController = async (req, res) => {
     slug,
     subTitle,
     content,
-    isFeatured,
   });
 
   // # Save Post

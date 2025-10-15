@@ -4,12 +4,12 @@ import mongoose from 'mongoose'; // Erase if already required
 const commentSchema = new mongoose.Schema(
   {
     commentUser: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'UserModel',
       required: true,
     },
     commentPost: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'PostsModel',
       required: true,
     },
@@ -22,4 +22,6 @@ const commentSchema = new mongoose.Schema(
 );
 
 //Export the model
-module.exports = mongoose.model('CommentModel', commentSchema);
+const CommentModel = mongoose.model('CommentModels', commentSchema);
+
+export default CommentModel;
