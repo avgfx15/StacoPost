@@ -55,7 +55,7 @@ const WritePage = () => {
   const mutation = useMutation({
     mutationFn: async (newPost) => {
       const token = await getToken();
-      console.log(token);
+
       return createNewPostAction(newPost, token);
     },
     onError: (error) => {
@@ -63,7 +63,8 @@ const WritePage = () => {
     },
     onSuccess: (res) => {
       toast.success('Post Created Successfully');
-      navigate(`/${res.slug}`);
+
+      navigate(`/posts/${res.slug}`);
     },
   });
 

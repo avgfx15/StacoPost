@@ -22,9 +22,9 @@ const NavbarComponent = () => {
 
   useEffect(() => {
     (async () => {
-      const token = await getToken();
+      await getToken();
     })();
-  }, []);
+  }, [getToken]);
 
   // @ Open Mobile Menu Declare Variable With State
   const [openMobileMenu, setOpenMobileMenu] = useState(false);

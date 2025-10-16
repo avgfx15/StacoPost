@@ -7,6 +7,8 @@ import { Image } from '@imagekit/react';
 
 const ImageComponent = ({ src, alt, className, width, height }) => {
   // ^ Render ImageComponent
+  if (!src) return null; // Prevent rendering with empty src
+
   return (
     <Image
       urlEndpoint={import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT}

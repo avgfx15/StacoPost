@@ -10,9 +10,12 @@ import CategoriesComponent from '../Components/CategoriesComponent';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSinglePostAction } from '../Actions/PostActions';
 import { format } from 'timeago.js';
+import { useUser } from '@clerk/clerk-react';
 
 // & Single Post Page Component
 const SinglePostPage = () => {
+  const { user } = useUser();
+
   // Get slug from URL params
   const { slug } = useParams();
 
@@ -34,7 +37,7 @@ const SinglePostPage = () => {
 
   // ^ Render Single Post Page
   return (
-    <div className='flex flex-col gap-8'>
+    <div className='flex flex-col gap-8 mb-10'>
       {/* DETAILS */}
       <div className='flex gap-8'>
         {/* TEXT */}
@@ -79,7 +82,7 @@ const SinglePostPage = () => {
           <div className=''>
             <div className='flex items-center gap-5 mb-3'>
               <ImageComponent
-                src={post?.author?.profileImage}
+                src={post?.author?.profileImage || user.imageUrl}
                 alt='User'
                 className='h-12 w-12 rounded-full'
                 width='48'

@@ -5,12 +5,12 @@ const commentSchema = new mongoose.Schema(
   {
     commentUser: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'UserModel',
+      ref: 'UserModels',
       required: true,
     },
     commentPost: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'PostsModel',
+      ref: 'PostModels',
       required: true,
     },
     commentDesc: {

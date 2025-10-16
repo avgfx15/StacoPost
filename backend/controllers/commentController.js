@@ -1,15 +1,16 @@
 import CommentModel from '../models/commentModel.js';
+import UserModel from '../models/userModel.js';
 
 // / Get All Comments By Post ID
 export const getAllCommentsByPostIdController = async (req, res) => {
   try {
-    const { postId } = req.params;
+    const postId = req.params.postId;
 
     // ~ Logic to get comments by postId from the database
     // For example:
-    const comments = await CommentModel.find({ postId })
-      .populate('commentUser', 'username avatar')
-      .populate('commentPost', 'postTitle')
+    const comments = await CommentModel.find({ commentPost: postId })
+      .populate('commentUser', 'username email')
+      .populate('commentPost', 'postTitle slug')
       .sort({ createdAt: -1 });
 
     res.status(200).json(comments);
@@ -25,10 +26,22 @@ export const createCommentForPostController = async (req, res) => {
   try {
     // $ Get Clerk Id from client session
     const getUser = req.auth();
-    console.log(getUser);
-    const { postId } = req.params;
+
+    // % clerkId not exist
+    if (!getUser) {
+      return res.status(401).json({ message: 'You are Unauthorized' });
+    }
+
+    // % Find User Form UserModel
+    const userExist = await UserModel.findOne({ clerkId: getUser.userId });
+
+    if (!userExist) {
+      return res.status(404).json({ message: 'User Not Found' });
+    }
+    // $ Get Post ID from params
+    const postId = req.params.postId;
     const { commentDesc } = req.body;
-    const commentUser = req.user._id; // Assuming user ID is available in req.user
+    const commentUser = userExist._id; // Assuming user ID is available in req.user
 
     // ~ Logic to create a new comment for the post
     const newComment = new CommentModel({
@@ -36,6 +49,7 @@ export const createCommentForPostController = async (req, res) => {
       commentPost: postId,
       commentDesc,
     });
+
     await newComment.save();
     res.status(201).json(newComment);
   } catch (error) {

@@ -19,8 +19,6 @@ export const fetchSinglePostAction = async (slug) => {
 
 // + Create New Post Action
 export const createNewPostAction = async (newPost, token) => {
-  console.log(newPost);
-  console.log(token);
   const response = await axios.post(`${baseUrl}/posts`, newPost, {
     headers: {
       Authorization: `Bearer ${token}`,
