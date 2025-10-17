@@ -194,6 +194,9 @@ export const createPostController = async (req, res) => {
 // - Delete Post By Id
 
 export const deletePostController = async (req, res) => {
+  // % Get PostId from params
+  const postId = req.params.postId;
+
   // $ Get Clerk Id from client session
   const getUser = req.auth();
 
@@ -201,7 +204,7 @@ export const deletePostController = async (req, res) => {
   if (!getUser) {
     return res.status(401).json({ message: 'You are Unauthorized' });
   }
-  console.log(getUser);
+
   // % Find User Form UserModel
   const userExist = await UserModel.findOne({ clerkId: getUser.userId });
 
@@ -209,8 +212,14 @@ export const deletePostController = async (req, res) => {
     return res.status(404).json({ message: 'User Not Found' });
   }
 
-  // % Get PostId from params
-  const postId = req.params.postId;
+  // $ Check if User is Admin or not
+  const isAdmin = getUser.sessionClaims?.metadata?.role === 'admin';
+  console.log(isAdmin);
+
+  if (isAdmin) {
+    await PostModel.findOneAndDelete({ _id: postId });
+    return res.status(200).json('Post Deleted Successfully!');
+  }
 
   // % Find Post By PostId and authorId
   const findPost = await PostModel.findOne({

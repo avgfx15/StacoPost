@@ -62,13 +62,37 @@ export const createCommentForPostController = async (req, res) => {
 // - Delete Comment By ID
 export const deleteCommentByIdController = async (req, res) => {
   try {
+    // $ Get Clerk Id from client session
+    const getUser = req.auth();
+    // % clerkId not exist
+    if (!getUser) {
+      return res.status(401).json({ message: 'You are Unauthorized' });
+    }
+
+    // % Find User Form UserModel
+    const userExist = await UserModel.findOne({ clerkId: getUser.userId });
+    if (!userExist) {
+      return res.status(404).json({ message: 'User Not Found' });
+    }
+
+    // $ Get Comment ID from params
     const { commentId } = req.params;
+    // % Check if comment exists
     const comment = await CommentModel.findById(commentId);
     if (!comment) {
       return res.status(404).json({ message: 'Comment not found' });
     }
+
+    // $ Check if User is Admin or not
+    const isAdmin = getUser.sessionClaims?.metadata?.role === 'admin';
+
+    if (isAdmin) {
+      await CommentModel.findOneAndDelete({ _id: commentId });
+      return res.status(200).json('Comment Deleted Successfully!');
+    }
+
     // Check if the user is the owner of the comment or has admin rights
-    if (comment.commentUser.toString() !== req.user._id.toString()) {
+    if (comment.commentUser.toString() !== getUser._id.toString()) {
       return res
         .status(403)
         .json({ message: 'Unauthorized to delete this comment' });
