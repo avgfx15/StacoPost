@@ -27,8 +27,18 @@ export const createNewPostAction = async (newPost, token) => {
   return response.data;
 };
 
-// - Delete Single Post Action
-export const deleteSinglePostAction = async (postId, token) => {
+// // - Delete Single Post Action
+// export const deleteSinglePostAction = async (postId, token) => {
+//   const response = await axios.delete(`${baseUrl}/posts/${postId}`, {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });
+//   return response.data;
+// };
+
+// - Remove Post By AuthorAction
+export const deletePostByAuthorAction = async (postId, token) => {
   const response = await axios.delete(`${baseUrl}/posts/${postId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -38,9 +48,9 @@ export const deleteSinglePostAction = async (postId, token) => {
 };
 
 // + User Saved Post Action
-export const userSavedPostAction = async (postId, token) => {
-  const response = await axios.post(
-    `${baseUrl}/savedposts`,
+export const userSaveOrUnSavePostAction = async (postId, token) => {
+  const response = await axios.patch(
+    `${baseUrl}/users/savepost`,
     { postId },
     {
       headers: {
@@ -54,16 +64,6 @@ export const userSavedPostAction = async (postId, token) => {
 // / Fetch All Saved Posts Action
 export const fetchAllSavedPostsAction = async (token) => {
   const response = await axios.get(`${baseUrl}/users/savedposts`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
-};
-
-// - Remove Saved Post Action
-export const removeSavedPostAction = async (postId, token) => {
-  const response = await axios.delete(`${baseUrl}/savedposts/${postId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

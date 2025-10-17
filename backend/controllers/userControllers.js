@@ -44,6 +44,7 @@ export const savePostForUserController = async (req, res) => {
     if (!userExist) {
       return res.status(404).json({ message: 'User Not Found' });
     }
+
     // $ Get Post ID from body
     const { postId } = req.body;
 
@@ -51,7 +52,7 @@ export const savePostForUserController = async (req, res) => {
       return res.status(400).json({ message: 'Post ID is required' });
     }
 
-    const isPostSaved = userExist.savedPosts.some((post) => post === postId);
+    const isPostSaved = userExist.savedPosts.includes(postId);
 
     // ~ Logic to save post for the user
     if (isPostSaved) {
@@ -61,7 +62,7 @@ export const savePostForUserController = async (req, res) => {
         { new: true }
       );
 
-      return res.status(400).json({ message: 'Post is Unsaved Now!' });
+      return res.status(200).json({ message: 'Post is Unsaved Now!' });
     } else {
       await UserModel.findByIdAndUpdate(
         userExist._id,
@@ -69,8 +70,7 @@ export const savePostForUserController = async (req, res) => {
         { new: true }
       );
 
-      console.log(userExist);
-      return res.status(400).json({ message: 'Post is Saved Now!' });
+      return res.status(200).json({ message: 'Post is Saved Now!' });
     }
   } catch (error) {
     return res
