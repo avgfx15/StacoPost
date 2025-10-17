@@ -1,10 +1,5 @@
 import { useAuth, useUser } from '@clerk/clerk-react';
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 
 import { IoIosSave } from 'react-icons/io';
@@ -21,6 +16,7 @@ import {
 import { useNavigate } from 'react-router';
 
 import { toast } from 'react-toastify';
+import { SignInButton } from '@clerk/clerk-react';
 
 // & Post Menu Actions Component
 const PostMenuActionsComponent = ({ post }) => {
@@ -29,6 +25,9 @@ const PostMenuActionsComponent = ({ post }) => {
   const { getToken } = useAuth();
 
   const navigate = useNavigate();
+
+  // @ Check user is Admin or not
+  const isAdmin = user?.publicMetadata?.role === 'admin' || false;
 
   // Fetch saved posts to check if the current post is already saved;
 
@@ -43,6 +42,7 @@ const PostMenuActionsComponent = ({ post }) => {
       const token = await getToken();
       return fetchAllSavedPostsAction(token);
     },
+    enabled: !!user && !!getToken, // Only run if user is logged in and token is available
   });
   const isPostSaved = savedposts?.savedPosts?.includes(post._id) || false;
 
@@ -94,34 +94,53 @@ const PostMenuActionsComponent = ({ post }) => {
   return (
     <div className='flex flex-col gap-5 my-5'>
       <h1 className='font-bold'>Actions</h1>
-      {isPending ? (
-        'Loading...'
-      ) : error ? (
-        'Error to fetching saved posts'
-      ) : (
-        <div
-          className='flex items-center gap-3 cursor-pointer'
-          onClick={handleSaveOrUnSavePost}
-        >
-          {isPostSaved ? (
-            <IoIosSave className='text-3xl text-gray-600' />
+      {user ? (
+        <>
+          {isPending ? (
+            'Loading...'
+          ) : error ? (
+            'Error to fetching saved posts'
           ) : (
-            <IoSaveOutline className='text-3xl text-gray-600' />
-          )}
+            <div
+              className='flex items-center gap-3 cursor-pointer'
+              onClick={handleSaveOrUnSavePost}
+            >
+              {isPostSaved ? (
+                <IoIosSave className='text-3xl text-gray-600' />
+              ) : (
+                <IoSaveOutline className='text-3xl text-gray-600' />
+              )}
 
-          <span>Save this post</span>
-        </div>
-      )}
-      {user?.username === post?.author?.username && (
-        <div
-          className='flex items-center gap-3 cursor-pointer'
-          onClick={handleDeletePost}
-        >
-          <RiDeleteBin6Fill className='text-3xl text-red-600' />
-          <span>Delete this post</span>
-          {deletePostByAuthorMutation.isPending && (
-            <span className='pl-3 text-red-700'>Deleting...</span>
+              <span>Save this post</span>
+            </div>
           )}
+          {user && (user?.username === post?.author?.username || isAdmin) && (
+            <div
+              className='flex items-center gap-3 cursor-pointer'
+              onClick={handleDeletePost}
+            >
+              <RiDeleteBin6Fill className='text-3xl text-red-600' />
+              <span>Delete this post</span>
+              {deletePostByAuthorMutation.isPending && (
+                <span className='pl-3 text-red-700'>Deleting...</span>
+              )}
+            </div>
+          )}
+        </>
+      ) : (
+        <div className='flex flex-col gap-3'>
+          <SignInButton mode='modal'>
+            <button className='flex items-center gap-3 cursor-pointer'>
+              <IoSaveOutline className='text-3xl text-gray-600' />
+              <span>Save this post</span>
+            </button>
+          </SignInButton>
+          <SignInButton mode='modal'>
+            <button className='flex items-center gap-3 cursor-pointer'>
+              <RiDeleteBin6Fill className='text-3xl text-red-600' />
+              <span>Delete this post</span>
+            </button>
+          </SignInButton>
         </div>
       )}
     </div>
