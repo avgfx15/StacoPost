@@ -9,7 +9,7 @@ export const getAllCommentsByPostIdController = async (req, res) => {
     // ~ Logic to get comments by postId from the database
     // For example:
     const comments = await CommentModel.find({ commentPost: postId })
-      .populate('commentUser', 'username email')
+      .populate('commentUser', 'username email profileImage')
       .populate('commentPost', 'postTitle slug')
       .sort({ createdAt: -1 });
 

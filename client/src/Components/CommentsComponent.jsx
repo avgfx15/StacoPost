@@ -9,6 +9,7 @@ import {
 import { toast } from 'react-toastify';
 import { useAuth, useUser } from '@clerk/clerk-react';
 
+// & Comments Component
 const CommentsComponent = ({ postId }) => {
   const { user } = useUser();
   // Fetch Comments data using the postId
@@ -57,6 +58,7 @@ const CommentsComponent = ({ postId }) => {
 
   const comments = data;
 
+  // ^ Render Comments Component
   return (
     <div className='flex flex-col gap-5 w-9/12'>
       <h1 className='text-lg underline text-gray-600'>Comments</h1>

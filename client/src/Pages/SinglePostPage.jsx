@@ -10,16 +10,13 @@ import CategoriesComponent from '../Components/CategoriesComponent';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSinglePostAction } from '../Actions/PostActions';
 import { format } from 'timeago.js';
-import { useUser } from '@clerk/clerk-react';
 
 // & Single Post Page Component
 const SinglePostPage = () => {
-  const { user } = useUser();
-
   // Get slug from URL params
   const { slug } = useParams();
 
-  // Fetch post data using the slug
+  // / Fetch post data using the slug
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['post', slug],
@@ -82,7 +79,7 @@ const SinglePostPage = () => {
           <div className=''>
             <div className='flex items-center gap-5 mb-3'>
               <ImageComponent
-                src={post?.author?.profileImage || user.imageUrl}
+                src={post?.author?.imageUrl}
                 alt='User'
                 className='h-12 w-12 rounded-full'
                 width='48'
@@ -104,7 +101,7 @@ const SinglePostPage = () => {
                 <FaInstagram className='text-3xl' />
               </NavLink>
             </div>
-            <PostMenuActionsComponent />
+            <PostMenuActionsComponent post={post} />
             <h1 className='mb-3 font-bold'>Categories</h1>
             <CategoriesComponent />
             <h1 className='mb-3 font-bold mt-5'>Search</h1>

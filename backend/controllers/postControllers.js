@@ -205,8 +205,6 @@ export const deletePostController = async (req, res) => {
   // % Find User Form UserModel
   const userExist = await UserModel.findOne({ clerkId: getUser.userId });
 
-  console.log(userExist);
-
   if (!userExist) {
     return res.status(404).json({ message: 'User Not Found' });
   }

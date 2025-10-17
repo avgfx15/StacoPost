@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // | Import Dependency
 import { NavLink } from 'react-router';
@@ -7,9 +7,21 @@ import { NavLink } from 'react-router';
 import MainCategoriesNav from '../Components/MainCategoriesNav';
 import FeaturedPost from '../Components/FeaturedPost';
 import RecentPostsComponent from '../Components/RecentPostsComponent';
+import { useAuth } from '@clerk/clerk-react';
 
 // & Home Page Component
 const HomePage = () => {
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const token = await getToken();
+      console.log('Clerk Token:', token);
+    };
+
+    fetchToken();
+  }, [getToken]);
+
   // ^ Render Home Page
   return (
     <div className='flex flex-col gap-4'>

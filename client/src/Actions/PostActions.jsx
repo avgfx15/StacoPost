@@ -37,6 +37,40 @@ export const deleteSinglePostAction = async (postId, token) => {
   return response.data;
 };
 
+// + User Saved Post Action
+export const userSavedPostAction = async (postId, token) => {
+  const response = await axios.post(
+    `${baseUrl}/savedposts`,
+    { postId },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+// / Fetch All Saved Posts Action
+export const fetchAllSavedPostsAction = async (token) => {
+  const response = await axios.get(`${baseUrl}/users/savedposts`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// - Remove Saved Post Action
+export const removeSavedPostAction = async (postId, token) => {
+  const response = await axios.delete(`${baseUrl}/savedposts/${postId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
 // / Fetch All Categories Action
 export const fetchAllCategoriesAction = async () => {
   const response = await axios.get(`${baseUrl}/categories`);

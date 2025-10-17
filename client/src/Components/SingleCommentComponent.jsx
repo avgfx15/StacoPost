@@ -9,20 +9,15 @@ import { NavLink } from 'react-router';
 // | Import Dependency
 import { format } from 'timeago.js';
 
-// | Import UserData from Clerk
-import { useUser } from '@clerk/clerk-react';
-
 // & Single Comment Component
 
 const SingleCommentComponent = ({ comment }) => {
-  const { user } = useUser();
-
   // ^ Render Single Comment Component
   return (
     <div className='p-4 bg-sky-100 rounded-xl'>
       <div className='flex items-center gap-3 mb-3'>
         <ImageComponent
-          src={comment.commentUser?.profileImage || user.imageUrl}
+          src={comment.commentUser?.profileImage}
           alt='User'
           className='h-10 w-10 rounded-full'
           width='24'
