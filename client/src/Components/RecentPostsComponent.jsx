@@ -8,15 +8,14 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 // | Import TanStackQuery
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchAllPostsAction } from '../Actions/PostActions';
+import { useSearchParams } from 'react-router';
 
 // & Recent Posts Component
 const RecentPostsComponent = () => {
+  // % SearchParams Hook from react-router-dom
+  const [searchParams] = useSearchParams();
+
   // ` Configure TanStack Query For Data
-  // const { isPending, error, data } = useQuery({
-  //   queryKey: ['repoData'],
-  //   queryFn: () => fetchAllPostsAction(),
-  // });
-  // console.log(data);
 
   const {
     data,
@@ -27,8 +26,9 @@ const RecentPostsComponent = () => {
     // isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ['posts'],
-    queryFn: ({ pageParam = 1 }) => fetchAllPostsAction(pageParam),
+    queryKey: ['posts', searchParams.toString()],
+    queryFn: ({ pageParam = 1 }) =>
+      fetchAllPostsAction(pageParam, searchParams),
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) =>
       lastPage.hasMore ? pages.length + 1 : undefined,

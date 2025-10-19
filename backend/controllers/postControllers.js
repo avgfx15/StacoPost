@@ -42,12 +42,92 @@ export const getAllPostController = async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
   const limit = parseInt(req.query.limit) || 5;
 
-  const allPost = await PostModel.find()
+  const query = {};
+
+  const category = req.query.category;
+  const author = req.query.author;
+  const searchInput = req.query.searchInput;
+  const featuredPost = req.query.featuredPost;
+  const sortQuery = req.query.sortQuery;
+
+  if (category) {
+    const categoryDoc = await CategoryModel.findOne({
+      $or: [
+        { name: category.toLowerCase() },
+        {
+          slug: slugify(category, {
+            replacement: '_',
+            remove: undefined,
+            lower: true,
+            strict: false,
+            locale: 'vi',
+            trim: true,
+          }),
+        },
+      ],
+    });
+
+    console.log(categoryDoc);
+
+    if (categoryDoc) {
+      query.category = categoryDoc._id;
+    } else {
+      query.category = category;
+    }
+  }
+  if (author) {
+    const authorDoc = await UserModel.findOne({
+      $or: [
+        { username: author.toLowerCase() },
+        {
+          email: author.toLowerCase(),
+        },
+      ],
+    });
+
+    if (authorDoc) {
+      query.author = authorDoc._id;
+    } else {
+      query.author = author;
+    }
+  }
+  if (searchInput) {
+    query.postTitle = { $regex: searchInput, $options: 'i' };
+  }
+  if (featuredPost) {
+    query.isFeatured = featuredPost;
+  }
+  let sortObject = { createdAt: -1 };
+
+  if (sortQuery) {
+    switch (sortQuery) {
+      case 'newest':
+        sortObject = { createdAt: -1 };
+        break;
+      case 'oldest':
+        sortObject = { createdAt: 1 };
+        break;
+      case 'popular':
+        sortObject = { visit: -1 };
+        break;
+      case 'trending':
+        sortObject = { visit: -1 };
+        query.createdAt = {
+          $gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+        };
+
+        break;
+      default:
+        break;
+    }
+  }
+
+  const allPost = await PostModel.find(query)
     .populate('author', 'username email profileImage')
     .populate('category', 'name slug')
+    .sort(sortObject)
     .limit(limit)
-    .skip((page - 1) * 5)
-    .sort({ createdAt: -1 });
+    .skip((page - 1) * 5);
 
   const totalPosts = await PostModel.countDocuments();
   const hasMore = page * limit < totalPosts;

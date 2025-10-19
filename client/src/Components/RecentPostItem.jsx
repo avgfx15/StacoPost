@@ -36,11 +36,17 @@ const RecentPostItem = ({ post }) => {
         </NavLink>
         <div className='flex items-center gap-4 text-sm lg:text-base text-gray-400'>
           <span>Written By</span>
-          <NavLink className='text-sky-600 capitalize'>
+          <NavLink
+            className='text-sky-600 capitalize'
+            to={`/posts?author=${post?.author?.username}`}
+          >
             {post?.author?.username || 'Stacodev'}
           </NavLink>
           <span>on</span>
-          <NavLink className='text-sky-600 capitalize'>
+          <NavLink
+            className='text-sky-600 capitalize'
+            to={`/posts?category=${post?.category?.name}`}
+          >
             {post?.category?.name || 'General'}
           </NavLink>
           <span>{format(post?.createdAt)}</span>

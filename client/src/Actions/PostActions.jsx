@@ -3,9 +3,12 @@ import axios from 'axios';
 const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
 // / Fetch All Posts Action
-export const fetchAllPostsAction = async (pageParams) => {
+export const fetchAllPostsAction = async (pageParams, searchParams) => {
+  console.log(searchParams);
+  const searchParamsObject = Object.fromEntries([...searchParams]);
+
   const response = await axios.get(`${baseUrl}/posts`, {
-    params: { page: pageParams, limit: 5 },
+    params: { page: pageParams, ...searchParamsObject },
   });
   return response.data;
 };
