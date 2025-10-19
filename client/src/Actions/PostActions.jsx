@@ -124,3 +124,13 @@ export const createCommentForPostAction = async (
   );
   return response.data;
 };
+
+// - Delete Comment Action
+export const deleteCommentForPostAction = async (commentId, token) => {
+  const response = await axios.delete(`${baseUrl}/comments/${commentId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

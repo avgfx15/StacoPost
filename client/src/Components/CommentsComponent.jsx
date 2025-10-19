@@ -97,7 +97,11 @@ const CommentsComponent = ({ postId }) => {
       )}
 
       {comments.map((comment) => (
-        <SingleCommentComponent key={comment._id} comment={comment} />
+        <SingleCommentComponent
+          key={comment._id}
+          comment={comment}
+          postId={postId}
+        />
       ))}
     </div>
   );

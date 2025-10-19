@@ -91,7 +91,7 @@ export const deleteCommentByIdController = async (req, res) => {
       return res.status(200).json('Comment Deleted Successfully!');
     }
 
-    // Check if the user is the owner of the comment or has admin rights
+    // % Check if the user is the owner of the comment or has admin rights
     if (comment.commentUser.toString() !== getUser._id.toString()) {
       return res
         .status(403)
