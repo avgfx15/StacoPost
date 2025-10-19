@@ -8,6 +8,7 @@ const postRouter = express.Router();
 import {
   createPostController,
   deletePostController,
+  featurePostController,
   getAllPostController,
   getSinglePostBySlugController,
 } from '../controllers/postControllers.js';
@@ -27,6 +28,9 @@ postRouter.post('/', createPostController);
 
 // - Delete Post By Id
 postRouter.delete('/:postId', deletePostController);
+
+// + Feature the post
+postRouter.patch('/feature', featurePostController);
 
 // ~ Export postRouter
 export default postRouter;

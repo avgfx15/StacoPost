@@ -27,6 +27,20 @@ export const createNewPostAction = async (newPost, token) => {
   return response.data;
 };
 
+// + Feature Post Action
+export const featurePostAction = async (postId, token) => {
+  const response = await axios.patch(
+    `${baseUrl}/posts/feature`,
+    { postId },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 // // - Delete Single Post Action
 // export const deleteSinglePostAction = async (postId, token) => {
 //   const response = await axios.delete(`${baseUrl}/posts/${postId}`, {

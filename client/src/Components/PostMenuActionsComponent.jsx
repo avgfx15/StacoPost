@@ -1,4 +1,4 @@
-import { useAuth, useUser } from '@clerk/clerk-react';
+import { useAuth, useUser, SignInButton } from '@clerk/clerk-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 
@@ -9,6 +9,7 @@ import { IoSaveOutline } from 'react-icons/io5';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import {
   deletePostByAuthorAction,
+  featurePostAction,
   fetchAllSavedPostsAction,
   userSaveOrUnSavePostAction,
 } from '../Actions/PostActions';
@@ -16,7 +17,8 @@ import {
 import { useNavigate } from 'react-router';
 
 import { toast } from 'react-toastify';
-import { SignInButton } from '@clerk/clerk-react';
+
+import { FaRegStar, FaStar } from 'react-icons/fa';
 
 // & Post Menu Actions Component
 const PostMenuActionsComponent = ({ post }) => {
@@ -28,6 +30,8 @@ const PostMenuActionsComponent = ({ post }) => {
 
   // @ Check user is Admin or not
   const isAdmin = user?.publicMetadata?.role === 'admin' || false;
+
+  const postFeatured = post?.isFeatured || false;
 
   // Fetch saved posts to check if the current post is already saved;
 
@@ -78,14 +82,36 @@ const PostMenuActionsComponent = ({ post }) => {
     },
   });
 
-  // $ Handle Delete Post
-  const handleDeletePost = () => {
-    if (prompt('Are you sure you want to delete this post?')) {
-      deletePostByAuthorMutation.mutate();
-    }
-  };
+  // + Feature Post Mutation
+  const featurePostMutation = useMutation({
+    mutationFn: async () => {
+      const token = await getToken();
+      return featurePostAction(post._id, token);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['post', post.slug]);
+      if (postFeatured) {
+        toast.warning('Post unfeatured successfully');
+      } else {
+        toast.success('Post featured successfully');
+      }
+    },
+    onError: (error) => {
+      toast.error('Error for feature post: ' + error.message);
+    },
+  });
 
   // $ Handle Delete Post
+  const handleDeletePost = () => {
+    deletePostByAuthorMutation.mutate();
+  };
+
+  // $ Handle Featured Post
+  const handleFeaturedPost = () => {
+    featurePostMutation.mutate();
+  };
+
+  // $ Handle Save Post
   const handleSaveOrUnSavePost = () => {
     saveOrUnSavePostMutation.mutate();
   };
@@ -112,6 +138,20 @@ const PostMenuActionsComponent = ({ post }) => {
               )}
 
               <span>Save this post</span>
+            </div>
+          )}
+          {isAdmin && (
+            <div
+              className='flex items-center gap-3 cursor-pointer'
+              onClick={handleFeaturedPost}
+            >
+              {postFeatured ? (
+                <FaStar className='text-3xl text-yellow-600' />
+              ) : (
+                <FaRegStar className='text-3xl text-gray-600' />
+              )}
+
+              <span>Feature this post</span>
             </div>
           )}
           {user && (user?.username === post?.author?.username || isAdmin) && (
