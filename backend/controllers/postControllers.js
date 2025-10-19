@@ -39,8 +39,8 @@ export const uploadAuthController = async (req, res) => {
 
 // / Get All Posts
 export const getAllPostController = async (req, res) => {
-  const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
-  const limit = parseInt(req.query.limit) || 5;
+  const page = Number.parseInt(req.query.page) || 1; // Default to page 1 if not provided
+  const limit = Number.parseInt(req.query.limit) || 5;
 
   const query = {};
 
@@ -48,31 +48,12 @@ export const getAllPostController = async (req, res) => {
   const author = req.query.author;
   const searchInput = req.query.searchInput;
   const featuredPost = req.query.featuredPost;
-  const sortQuery = req.query.sortQuery;
+  const sortQuery = req.query.sort;
 
   if (category) {
-    const categoryDoc = await CategoryModel.findOne({
-      $or: [
-        { name: category.toLowerCase() },
-        {
-          slug: slugify(category, {
-            replacement: '_',
-            remove: undefined,
-            lower: true,
-            strict: false,
-            locale: 'vi',
-            trim: true,
-          }),
-        },
-      ],
-    });
-
-    console.log(categoryDoc);
-
+    const categoryDoc = await CategoryModel.findOne({ slug: category });
     if (categoryDoc) {
       query.category = categoryDoc._id;
-    } else {
-      query.category = category;
     }
   }
   if (author) {
@@ -97,6 +78,7 @@ export const getAllPostController = async (req, res) => {
   if (featuredPost) {
     query.isFeatured = featuredPost;
   }
+
   let sortObject = { createdAt: -1 };
 
   if (sortQuery) {
@@ -121,6 +103,8 @@ export const getAllPostController = async (req, res) => {
         break;
     }
   }
+
+  console.log(sortObject);
 
   const allPost = await PostModel.find(query)
     .populate('author', 'username email profileImage')
