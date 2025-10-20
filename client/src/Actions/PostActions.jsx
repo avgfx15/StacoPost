@@ -14,6 +14,15 @@ export const fetchAllPostsAction = async (pageParams, searchParams) => {
 };
 
 // / Fetch Single Post Action
+export const fetchFeaturedPostAction = async () => {
+  const response = await axios.get(
+    `${baseUrl}/posts?featuredPost=true&limit=4&sort=newest`
+  );
+
+  return response.data;
+};
+
+// / Fetch Single Post Action
 export const fetchSinglePostAction = async (slug) => {
   const response = await axios.get(`${baseUrl}/posts/${slug}`);
 

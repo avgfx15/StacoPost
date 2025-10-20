@@ -76,7 +76,7 @@ export const getAllPostController = async (req, res) => {
     query.postTitle = { $regex: searchInput, $options: 'i' };
   }
   if (featuredPost) {
-    query.isFeatured = featuredPost;
+    query.isFeatured = true;
   }
 
   let sortObject = { createdAt: -1 };
@@ -90,10 +90,10 @@ export const getAllPostController = async (req, res) => {
         sortObject = { createdAt: 1 };
         break;
       case 'popular':
-        sortObject = { visit: -1 };
+        sortObject = { visitorsNo: -1 };
         break;
       case 'trending':
-        sortObject = { visit: -1 };
+        sortObject = { visitorsNo: -1 };
         query.createdAt = {
           $gte: new Date(new Date().setDate(new Date().getDate() - 7)),
         };
@@ -103,8 +103,6 @@ export const getAllPostController = async (req, res) => {
         break;
     }
   }
-
-  console.log(sortObject);
 
   const allPost = await PostModel.find(query)
     .populate('author', 'username email profileImage')
